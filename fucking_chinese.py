@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import time
+import random
 
 def initSet():
     global driver
@@ -80,6 +81,19 @@ def runMain():
                 comment_button.click()
                 time.sleep(2)
 
+                is_error = False
+
+                try:
+                    driver.find_element_by_xpath(
+                        "//div[@id='pl_feedlist_index']/div[4]/div[" + str(
+                            post) + "]/div[@class='card']/div[3]//div[@class='input-wrap input-wrap-review']/div[@class='input']/textarea"
+                    ).text
+                except NoSuchElementException:
+                    is_error = True
+
+                if is_error:
+                    continue
+
                 text_area = driver.find_element_by_xpath(
                     "//div[@id='pl_feedlist_index']/div[4]/div["+str(post)+"]/div[@class='card']/div[3]//div[@class='input-wrap input-wrap-review']/div[@class='input']/textarea"
                 )
@@ -89,12 +103,12 @@ def runMain():
                     "//div[@id='pl_feedlist_index']/div[4]/div[" + str(post) + "]/div[@class='card']/div[3]//div[@class='input-wrap input-wrap-review']/div[@class='func']/div[@class='btn']/a"
                 )
                 submit_button.click()
-                time.sleep(3)
+                time.sleep(2)
 
                 is_error = False
 
                 try:
-                    driver.find_element_by_xpath("/body/div[@class='m-layer']")
+                    driver.find_element_by_xpath("/body/div[@class='m-layer']").text
                 except NoSuchElementException:
                     is_error = True
 
@@ -103,6 +117,7 @@ def runMain():
                 else:
                     print("[s] 댓글을 성공적으로 작성하였습니다")
 
+                time.sleep(random.randint(1, 10))
 
 driver = None
 tags = [
